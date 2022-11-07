@@ -1,0 +1,12 @@
+.board-row {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+
+.board-wrapper {
+  background-color: green;
+  flex-direction: column;
+  margin: 20px;
+  padding: 10px;
+}
