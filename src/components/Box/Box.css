@@ -4,4 +4,12 @@
   background-color: yellowgreen;
   border-radius: 3px;
   margin: 2px;
+  font-size: 16pt;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.box.open {
+  background-color: rgb(205, 205, 205);
 }

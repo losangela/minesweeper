@@ -35,6 +35,7 @@ class Board {
   }
 
   reset() {
+    console.log('resetting')
     this.board = this.createNewBoard(this.size)
   }
 
