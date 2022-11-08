@@ -13,6 +13,13 @@ function App() {
           board.reset();
           forceUpdate();
         }}>new</button>
+        <button onClick={() => {
+          board._seeAll();
+          forceUpdate();
+        }}>reveal</button>
+        <button onClick={() => {
+          forceUpdate();
+        }}>refresh</button>
       </div>
       <SmallBoard />
     </div>

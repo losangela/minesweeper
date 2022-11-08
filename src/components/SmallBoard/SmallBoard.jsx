@@ -7,6 +7,8 @@ const SmallBoard = () => {
       {board.board.map((row, i) => <div className="board-row" key={i}>
         {row.map((box, j) => <BoxComponent
           box={box}
+          i={i}
+          j={j}
           key={i.toString() + '-' + j.toString()}
         />)}
       </div>)}

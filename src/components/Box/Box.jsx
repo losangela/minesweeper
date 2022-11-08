@@ -1,12 +1,17 @@
-import { useState } from "react";
 import useForceUpdate from "../../helpers/forceUpdate";
+import CurrentBoard from "../../helpers/board";
 
-const BoxComponent = ({ box }) => {
+const BoxComponent = ({ box, i, j }) => {
   const { val, isOpen, isFlagged } = box;
   const forceUpdate = useForceUpdate();
+
   const handleOnClick = (e) => {
     e.preventDefault();
-    box.openBox();
+    if (e.nativeEvent.shiftKey) {// holding shift,
+      CurrentBoard.setFlag(i, j);
+    } else {
+      CurrentBoard.openBox(i, j);
+    }
     forceUpdate();
   };
 
@@ -15,7 +20,9 @@ const BoxComponent = ({ box }) => {
       className={"box " + (isOpen && 'open')}
       onClick={handleOnClick}
     >
-      {isOpen && val}
+      {isOpen && (val > 0) && val}
+      {isOpen && val === -1 && '💣'}
+      {isFlagged && '🚩'}
     </div>
   )
 };
