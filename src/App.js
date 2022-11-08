@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import SmallBoard from './components/SmallBoard/SmallBoard';
+import Timer from './components/Timer/Timer';
 import {
   BOARD_SIZE_LARGE,
   BOARD_SIZE_MEDIUM,
@@ -24,17 +25,13 @@ function App() {
       <h3>{(isGameOver && !hasWon) ? 'Game Over!' : (isGameOver && hasWon) ? '🎉 CONGRATULATIONS!!! 🎉' : 'Let\'s play!'}</h3>
       <div className="row">
         <button onClick={() => dispatch(resetBoard())}>New Game</button>
-        {/* <button onClick={() => dispatch(_seeAll())}>reveal</button> */}
-        {/* <button onClick={() => {
-          forceUpdate();
-        }}>refresh</button> */}
-        {/* <button onClick={() => dispatch(changeSize())}>{boardSize}</button> */}
         <select value={boardSize} onChange={(e) => dispatch(changeSize({ size: e.target.value }))}>
           <option value={BOARD_SIZE_SMALL}>Small</option>
           <option value={BOARD_SIZE_MEDIUM}>Medium</option>
           <option value={BOARD_SIZE_LARGE}>Large</option>
         </select>
       </div>
+      <Timer />
       <SmallBoard />
     </div>
   );
