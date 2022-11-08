@@ -1,10 +1,12 @@
-import board from "../../helpers/board";
+import { useSelector } from "react-redux";
 import BoxComponent from "../Box/Box";
 
 const SmallBoard = () => {
+  const { board } = useSelector((state) => state.gameBoard);
+
   return(
     <div className="board-wrapper small">
-      {board.board.map((row, i) => <div className="board-row" key={i}>
+      {board.map((row, i) => <div className="board-row" key={i}>
         {row.map((box, j) => <BoxComponent
           box={box}
           i={i}

@@ -1,25 +1,23 @@
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import SmallBoard from './components/SmallBoard/SmallBoard';
-import board from './helpers/board';
-import useForceUpdate from './helpers/forceUpdate';
+import { changeSize, resetBoard, _seeAll } from './store/gameBoard';
 
 function App() {
-  const forceUpdate = useForceUpdate();
+  const { isGameOver, size: boardSize, hasWon } = useSelector((state) => state.gameBoard);
+  const dispatch = useDispatch();
+
   return (
     <div className="App">
       <h1>Minesweeper</h1>
+      <h3>{(isGameOver && !hasWon) ? 'Game Over!' : (isGameOver && hasWon) ? '🎉 CONGRATULATIONS!!! 🎉' : 'Let\'s play!'}</h3>
       <div className="row">
-        <button onClick={() => {
-          board.reset();
+        <button onClick={() => dispatch(resetBoard())}>new</button>
+        <button onClick={() => dispatch(_seeAll())}>reveal</button>
+        {/* <button onClick={() => {
           forceUpdate();
-        }}>new</button>
-        <button onClick={() => {
-          board._seeAll();
-          forceUpdate();
-        }}>reveal</button>
-        <button onClick={() => {
-          forceUpdate();
-        }}>refresh</button>
+        }}>refresh</button> */}
+        <button onClick={() => dispatch(changeSize())}>{boardSize}</button>
       </div>
       <SmallBoard />
     </div>

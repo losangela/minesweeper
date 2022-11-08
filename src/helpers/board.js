@@ -24,8 +24,8 @@ class Box {
 
 const BoardSize = {
   'small': [10, 8, 10],
-  'medium': [10, 10, 10],
-  'large': [20, 20, 10],
+  'medium': [18, 14, 40],
+  'large': [24, 20, 99],
 };
 
 class Board {
@@ -35,8 +35,20 @@ class Board {
   }
 
   reset() {
+    this.isGameOver = false;
     this.bombCount = BoardSize[this.size][2];
     this.board = this.createNewBoard(this.size)
+  }
+
+  changeSize(size) {
+    if (this.size === 'small') {
+      this.size = 'medium';
+    } else if (this.size === 'medium') {
+      this.size = 'large';
+    } else if (this.size === 'large') {
+      this.size = 'small';
+    }
+    this.reset();
   }
 
   createNewBoard(size) {
@@ -115,7 +127,7 @@ class Board {
   openBox(i, j) {
     const box = this.board[i][j];
     const [columns, rows] = BoardSize[this.size];
-    if (!box.canOpen()) {
+    if (!box.canOpen() || this.isGameOver) {
       return;
     }
     
@@ -174,8 +186,11 @@ class Board {
     if (box.val === 0) {
       checkPerimeter(i, j)
     } else if (box.val === -1) {
-      this._seeAll();
+      this.isGameOver = true;
+      this._seeAllBombs();
+      return;
     }
+    this._checkIfGameDone();
   }
 
   _seeAll() {
@@ -185,6 +200,31 @@ class Board {
         this.board[i][j].openBox(true);
       }
     }
+    this.isGameOver = true;
+  }
+
+  _seeAllBombs() {
+    const [columns, rows] = BoardSize[this.size];
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        if (this.board[i][j].val === -1) {
+          this.board[i][j].openBox(true);
+        }
+      }
+    }
+  }
+
+  _checkIfGameDone() {
+    const [columns, rows] = BoardSize[this.size];
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        if (this.board[i][j].val !== -1 && !this.board[i][j].isOpen) {
+          return false;
+        }
+      }
+    }
+    this.isGameOver = true;
+    return true;
   }
 };
 

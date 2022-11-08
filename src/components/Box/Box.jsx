@@ -1,23 +1,23 @@
-import useForceUpdate from "../../helpers/forceUpdate";
-import CurrentBoard from "../../helpers/board";
+import { useDispatch, useSelector } from "react-redux";
+import { openBox, setFlag } from "../../store/gameBoard";
 
-const BoxComponent = ({ box, i, j }) => {
-  const { val, isOpen, isFlagged } = box;
-  const forceUpdate = useForceUpdate();
+const BoxComponent = ({ i, j }) => {
+  const { isGameOver, board } = useSelector((state) => state.gameBoard);
+  const { val, isOpen, isFlagged } = board[i][j];
+  const dispatch = useDispatch();
 
   const handleOnClick = (e) => {
     e.preventDefault();
     if (e.nativeEvent.shiftKey) {// holding shift,
-      CurrentBoard.setFlag(i, j);
+      dispatch(setFlag({i, j}));
     } else {
-      CurrentBoard.openBox(i, j);
+      dispatch(openBox({i, j}));
     }
-    forceUpdate();
   };
 
   return(
     <div
-      className={"box " + (isOpen && 'open num-' + val)}
+      className={(isGameOver ? "box done " : "box " )+ (isOpen && 'open num-' + val)}
       onClick={handleOnClick}
     >
       {isOpen && (val > 0) && val}

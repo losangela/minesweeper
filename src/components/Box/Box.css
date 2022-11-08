@@ -11,7 +11,12 @@
   justify-content: center;
 }
 
+.box:hover:not(.done,.open) {
+  background-color: rgba(153, 205, 50, 0.817);
+}
+
 .box.open {
+  cursor: default;
   background-color: rgb(195, 202, 180);
 }
 
