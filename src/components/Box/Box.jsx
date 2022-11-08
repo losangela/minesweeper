@@ -17,7 +17,7 @@ const BoxComponent = ({ box, i, j }) => {
 
   return(
     <div
-      className={"box " + (isOpen && 'open')}
+      className={"box " + (isOpen && 'open num-' + val)}
       onClick={handleOnClick}
     >
       {isOpen && (val > 0) && val}

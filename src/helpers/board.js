@@ -120,7 +120,6 @@ class Board {
     }
     
     const checkPerimeter = (i, j) => {
-      // console.log('check perimeter', i, j)
       if (i - 1 >= 0 && this.board[i - 1][j].canOpen()) { // check top
         this.board[i - 1][j].openBox();
         if (this.board[i - 1][j].val === 0) {
@@ -172,7 +171,6 @@ class Board {
     };
 
     box.openBox();
-    console.log('val', box.val)
     if (box.val === 0) {
       checkPerimeter(i, j)
     } else if (box.val === -1) {

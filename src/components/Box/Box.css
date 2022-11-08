@@ -5,11 +5,48 @@
   border-radius: 3px;
   margin: 2px;
   font-size: 16pt;
+  font-weight: 700;
   text-align: center;
   align-items: center;
   justify-content: center;
 }
 
 .box.open {
-  background-color: rgb(205, 205, 205);
+  background-color: rgb(195, 202, 180);
+}
+
+.box.open.num--1 {
+  background-color: tomato;
+}
+
+.box.open.num-1 {
+  color: blue;
+}
+
+.box.open.num-2 {
+  color: green;
+}
+
+.box.open.num-3 {
+  color: red;
+}
+
+.box.open.num-4 {
+  color: purple;
+}
+
+.box.open.num-5 {
+  color: maroon;
+}
+
+.box.open.num-6 {
+  color: turquoise;
+}
+
+.box.open.num-7 {
+  color: black;
+}
+
+.box.open.num-8 {
+  color: gray;
 }
