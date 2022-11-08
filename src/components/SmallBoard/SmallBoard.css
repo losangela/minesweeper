@@ -7,6 +7,5 @@
 .board-wrapper {
   background-color: green;
   flex-direction: column;
-  margin: 0px 20px 20px 20px;
   padding: 4px;
 }

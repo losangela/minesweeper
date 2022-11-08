@@ -1,18 +1,13 @@
-.timer-wrapper {
+.bomb-counter-wrapper {
   display: flex;
   align-items: center;
   flex-direction: row;
-  justify-content: start;
+  justify-content: space-evenly;
   color: white;
   font-weight: 700;
   font-size: 12pt;
   padding: 3px;
-  border-top-right-radius: 5px;
-  width: 65px;
+  border-top-left-radius: 5px;
+  width: 60px;
   background-color: green;
-}
-
-.flex-1 {
-  margin: 0px 2px;
-  display: flex;
 }

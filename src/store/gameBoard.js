@@ -19,6 +19,7 @@ export const gameBoard = createSlice({
     hasWon: false,
     hasBombs: false,
     bombCount: BoardSize[BOARD_SIZE_SMALL][2],
+    flagCount: 0,
   },
   reducers: {
     resetBoard: (state) => {
@@ -26,6 +27,7 @@ export const gameBoard = createSlice({
       state.hasWon = false;
       state.hasBombs = false;
       state.bombCount = BoardSize[state.size][2];
+      state.flagCount = 0;
       gameBoard.caseReducers.createNewBoard(state);
     },
     createNewBoard: (state) => {
@@ -128,6 +130,10 @@ export const gameBoard = createSlice({
       const { i, j } = action.payload;
       if (!state.board[i][j].isOpen && !state.board[i][j].isFlagged) {
         state.board[i][j].isFlagged = true;
+        state.flagCount++;
+      } else if (state.board[i][j].isFlagged) {
+        state.board[i][j].isFlagged = false;
+        state.flagCount--;
       }
     },
     openBox: (state, action) => {
@@ -141,6 +147,7 @@ export const gameBoard = createSlice({
 
       if (box.isFlagged) {
         box.isFlagged = false;
+        state.flagCount--;
       }
 
       if (!canOpen(i, j) || state.isGameOver) {
