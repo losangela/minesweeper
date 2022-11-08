@@ -20,7 +20,7 @@ const BoxComponent = ({ i, j }) => {
 
   return(
     <div
-      className={(isGameOver ? "box done " : "box " )+ (isOpen && 'open num-' + val)}
+      className={(isGameOver ? "box done " : "box " ) + (isOpen && 'open num-' + val) + ' noselect'}
       onClick={handleOnClick}
     >
       {isOpen && (val > 0) && val}
