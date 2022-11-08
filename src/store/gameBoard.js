@@ -1,9 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
-import Box from '../helpers/box-model';
+import { createSlice } from '@reduxjs/toolkit';
 
-const BOARD_SIZE_SMALL = 'SMALL';
-const BOARD_SIZE_MEDIUM = 'MEDIUM';
-const BOARD_SIZE_LARGE = 'LARGE';
+export const BOARD_SIZE_SMALL = 'SMALL';
+export const BOARD_SIZE_MEDIUM = 'MEDIUM';
+export const BOARD_SIZE_LARGE = 'LARGE';
 
 const BoardSize = {
   [BOARD_SIZE_SMALL]: [10, 8, 10],
@@ -120,14 +119,9 @@ export const gameBoard = createSlice({
       }
       state.hasBombs = true;
     },
-    changeSize: (state) => {
-      if (state.size === BOARD_SIZE_SMALL) {
-        state.size = BOARD_SIZE_MEDIUM;
-      } else if (state.size === BOARD_SIZE_MEDIUM) {
-        state.size = BOARD_SIZE_LARGE;
-      } else if (state.size === BOARD_SIZE_LARGE) {
-        state.size = BOARD_SIZE_SMALL;
-      }
+    changeSize: (state, actions) => {
+      const { size } = actions.payload;
+      state.size = size;
       gameBoard.caseReducers.resetBoard(state);
     },
     setFlag: (state, action) => {
