@@ -18,24 +18,53 @@ export const gameBoard = createSlice({
     board: [],
     isGameOver: false,
     hasWon: false,
+    hasBombs: false,
     bombCount: BoardSize[BOARD_SIZE_SMALL][2],
   },
   reducers: {
     resetBoard: (state) => {
       state.isGameOver = false;
       state.hasWon = false;
+      state.hasBombs = false;
       state.bombCount = BoardSize[state.size][2];
-      // state.board = this.createNewBoard(state.size);
       gameBoard.caseReducers.createNewBoard(state);
     },
     createNewBoard: (state) => {
-      const [columns, rows, bombCount] = BoardSize[state.size];
+      const [columns, rows] = BoardSize[state.size];
       const newBoard = [];
+
+      // populate board with blanks
+      for (let i = 0; i < rows; i++) {
+        const newRow = [];
+        for (let j = 0; j < columns; j++) {
+            newRow.push({ val: 0, isOpen: false, isFlagged: false });
+        }
+        newBoard.push(newRow);
+      }
+
+      state.board = newBoard;
+      return newBoard;
+    },
+    _populateBombs: (state, action) => {
+      const { i: clickedI, j: clickedJ } = action.payload;
+      const [columns, rows, bombCount] = BoardSize[state.size];
       const bombIndexes = [];
+      const bombFree = [
+        (clickedI * columns) + clickedJ,
+        (clickedI * columns) + Math.abs(clickedJ + 1),
+        (clickedI * columns) + Math.abs(clickedJ - 1),
+        ((clickedI + 1) * columns) + clickedJ,
+        ((clickedI + 1) * columns) + Math.abs(clickedJ + 1),
+        ((clickedI + 1) * columns) + Math.abs(clickedJ - 1),
+        ((clickedI - 1) * columns) + clickedJ,
+        ((clickedI - 1) * columns) + Math.abs(clickedJ + 1),
+        ((clickedI - 1) * columns) + Math.abs(clickedJ - 1),
+      ];
+
       // add bomb indexes
       while (bombIndexes.length < bombCount) {
         let newBombIndex = Math.floor(Math.random() * columns * rows);
-        if (!bombIndexes.includes(newBombIndex)) {
+        if (!bombIndexes.includes(newBombIndex) && !bombFree.includes(newBombIndex)) {
           bombIndexes.push(newBombIndex);
         }
       }
@@ -44,44 +73,39 @@ export const gameBoard = createSlice({
   
       // populate board with bombs and blanks
       for (let i = 0; i < rows; i++) {
-        const newRow = [];
         for (let j = 0; j < columns; j++) {
           if ((i * columns) + j === nextBomb) { // if bomb index
             nextBomb = bombIndexes.pop();
-            newRow.push({ val: -1, isOpen: false, isFlagged: false })
-          } else { // not bomb index
-            newRow.push({ val: 0, isOpen: false, isFlagged: false })
+            state.board[i][j].val = -1;
           }
         }
-        newBoard.push(newRow);
       }
-  
   
       // traverse board again and replace blanks with numbers
       const bombPerimeterCount = (i, j) => {
         let count = 0;
-        if (i - 1 >= 0 && newBoard[i - 1][j].val < 0) { // check top
+        if (i - 1 >= 0 && state.board[i - 1][j].val < 0) { // check top
           count++
         }
-        if (i - 1 >= 0 && j + 1 < columns && newBoard[i - 1][j + 1].val < 0) { // check top right
+        if (i - 1 >= 0 && j + 1 < columns && state.board[i - 1][j + 1].val < 0) { // check top right
           count++
         }
-        if (j + 1 < columns && newBoard[i][j + 1].val < 0) { // check right
+        if (j + 1 < columns && state.board[i][j + 1].val < 0) { // check right
           count++
         }
-        if (i + 1 < rows && j + 1 < columns && newBoard[i + 1][j + 1].val < 0) { // check bottom right
+        if (i + 1 < rows && j + 1 < columns && state.board[i + 1][j + 1].val < 0) { // check bottom right
           count++
         }
-        if (i + 1 < rows && newBoard[i + 1][j].val < 0) { // check bottom
+        if (i + 1 < rows && state.board[i + 1][j].val < 0) { // check bottom
           count++
         }
-        if (i + 1 < rows && j - 1 >= 0 && newBoard[i + 1][j - 1].val < 0) { // check bottom left
+        if (i + 1 < rows && j - 1 >= 0 && state.board[i + 1][j - 1].val < 0) { // check bottom left
           count++
         }
-        if (j - 1 >= 0 && newBoard[i][j - 1].val < 0) { // check left
+        if (j - 1 >= 0 && state.board[i][j - 1].val < 0) { // check left
           count++
         }
-        if (i - 1 >= 0 && j - 1 >= 0 && newBoard[i - 1][j - 1].val < 0) {// check top left
+        if (i - 1 >= 0 && j - 1 >= 0 && state.board[i - 1][j - 1].val < 0) {// check top left
           count++
         }
         return count
@@ -89,12 +113,12 @@ export const gameBoard = createSlice({
   
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < columns; j++) {
-          if (newBoard[i][j].val !== -1) { // if not bomb
-            newBoard[i][j].val = bombPerimeterCount(i, j);
+          if (state.board[i][j].val !== -1) { // if not bomb
+            state.board[i][j].val = bombPerimeterCount(i, j);
           }
         }
       }
-      state.board = newBoard;
+      state.hasBombs = true;
     },
     changeSize: (state) => {
       if (state.size === BOARD_SIZE_SMALL) {
@@ -232,5 +256,6 @@ export const {
   setFlag,
   openBox,
   _seeAll,
+  _populateBombs,
 } = gameBoard.actions;
 export default gameBoard.reducer;

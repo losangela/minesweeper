@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { openBox, setFlag } from "../../store/gameBoard";
+import { openBox, setFlag, _populateBombs } from "../../store/gameBoard";
 
 const BoxComponent = ({ i, j }) => {
-  const { isGameOver, board } = useSelector((state) => state.gameBoard);
+  const { isGameOver, board, hasBombs } = useSelector((state) => state.gameBoard);
   const { val, isOpen, isFlagged } = board[i][j];
   const dispatch = useDispatch();
 
@@ -11,6 +11,9 @@ const BoxComponent = ({ i, j }) => {
     if (e.nativeEvent.shiftKey) {// holding shift,
       dispatch(setFlag({i, j}));
     } else {
+      if (!hasBombs) {
+        dispatch(_populateBombs({i, j}))
+      }
       dispatch(openBox({i, j}));
     }
   };
